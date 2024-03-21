@@ -1,0 +1,19 @@
+﻿<Window x:Class="sample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sample"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+
+        <TextBox x:Name="LogTextBox" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Height="400" Width="300" Margin="10,10,490,24"/>
+        <Button Name="ScanWithVirusTotalButton" Content="Scan with VirusTotal" Margin="5" Height="20" Width="200"/>
+        <Button x:Name="ScanAndCleanFlashDriveButton"
+                Content="Scan and Clean Flash Drive"
+                IsEnabled="{Binding IsFlashDriveDetected}"
+                Click="ScanAndCleanFlashDrive_Click" Height="20" Width="200" Margin="300,167,300,247" />
+
+    </Grid>
+</Window>
