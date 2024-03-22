@@ -51,6 +51,7 @@ namespace sample
         }
 
 
+
         private class RemovableDriveInfo
         {
             public string DriveLetter { get; set; }
@@ -425,37 +426,62 @@ namespace sample
             }
         }
 
+
+
+
         private void ReformatFlashDrive()
         {
             try
             {
                 string driveLetter = "F"; // Replace with the appropriate drive letter
-                string command = $"format {driveLetter}: /FS:FAT32 /Q /X"; // Command to format the drive as FAT32
 
-                // Start a new process to execute the command
-                ProcessStartInfo psi = new ProcessStartInfo("cmd.exe")
+                // Check if the drive is ready
+                DriveInfo driveInfo = new DriveInfo(driveLetter);
+                if (driveInfo.IsReady)
                 {
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
+                    // Delete all files and directories on the drive
+                    DirectoryInfo directoryInfo = new DirectoryInfo(driveInfo.RootDirectory.FullName);
+                    foreach (FileInfo file in directoryInfo.GetFiles())
+                    {
+                        file.Delete();
+                    }
+                    foreach (DirectoryInfo dir in directoryInfo.GetDirectories())
+                    {
+                        dir.Delete(true);
+                    }
 
-                Process process = Process.Start(psi);
-                process.StandardInput.WriteLine(command);
-                process.StandardInput.Flush();
-                process.StandardInput.Close();
-                process.WaitForExit();
+                    // Format the drive as FAT32
+                    string command = $"format {driveLetter}: /FS:FAT32 /Q /X";
 
-                // Check the exit code to determine if the format was successful
-                if (process.ExitCode == 0)
-                {
-                    Log($"Flash drive formatted successfully");
+                    // Start a new process to execute the command
+                    ProcessStartInfo psi = new ProcessStartInfo("cmd.exe")
+                    {
+                        UseShellExecute = false,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    };
+
+                    Process process = Process.Start(psi);
+                    process.StandardInput.WriteLine(command);
+                    process.StandardInput.Flush();
+                    process.StandardInput.Close();
+                    process.WaitForExit();
+
+                    // Check the exit code to determine if the format was successful
+                    if (process.ExitCode == 0)
+                    {
+                        Log($"Flash drive formatted successfully");
+                    }
+                    else
+                    {
+                        Log($"Error formatting flash drive");
+                    }
                 }
                 else
                 {
-                    Log($"Error formatting flash drive");
+                    Log($"Drive {driveLetter} is not ready");
                 }
             }
             catch (Exception ex)
@@ -466,6 +492,7 @@ namespace sample
                 MessageBox.Show($"Error formatting flash drive: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
 
 
