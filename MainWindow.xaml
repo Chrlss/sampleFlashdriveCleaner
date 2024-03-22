@@ -12,8 +12,8 @@
         <Button Name="ScanWithVirusTotalButton" Content="Scan with VirusTotal" Margin="5" Height="20" Width="200"/>
         <Button x:Name="ScanAndCleanFlashDriveButton"
                 Content="Scan and Clean Flash Drive"
-                IsEnabled="{Binding IsFlashDriveDetected}"
-                Click="ScanAndCleanFlashDrive_Click" Height="20" Width="200" Margin="300,167,300,247" />
+                
+                Click="ScanAndCleanFlashDrive_Click" Height="20" Width="200" Margin="300,167,300,247" Visibility="Hidden"/>
 
     </Grid>
 </Window>
